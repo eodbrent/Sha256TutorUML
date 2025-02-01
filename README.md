@@ -1,1 +1,2 @@
-# Sha256TutorUML
+# Sha256TutorUML (WIP)
+This college capstone project did not have any documentation when we started. I took the initiative of finding a scaleable solution that future classes could use. We were assigned certain views to work on, but the shear number of classes in the project made it very difficult to navigate and find your assigned class. With this PlantUML flow, you simply change the variable to what you're looking for and it generates a UML class diagram relevant to only your class.
