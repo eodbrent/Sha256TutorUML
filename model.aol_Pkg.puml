@@ -1,0 +1,279 @@
+@startuml
+!include variables.puml
+class Assessment $tag00 {
+  - outcome : KnowledgeComponent
+  - assessment : AssessmentLevel
+  - exposures : int 
+  - successes : int 
+  + Assessment(outcome : KnowledgeComponent, \nassessment : AssessmentLevel) : void
+  + getOutcome() : KnowledgeComponent
+  + setOutcome(outcome : KnowledgeComponent) : void
+  + getAssessment() : AssessmentLevel
+  + setAssessment(assessment : AssessmentLevel) : void
+  + getExposures() : int
+  + setExposures(exposures : int)
+  + incrementExposures() : void
+  + getSuccesses() : int 
+  + setSuccesses(successess) : void
+  + incrementSuccessess() : void
+}
+enum AssessmentLevel $tag01 {
+  VERY_LOW
+  LOW
+  MEDIUM
+  HIGH
+  VERY_HIGH
+  IN_PROGRESS
+  COMPLETED
+  NOT_STARTE
+  - title : String
+  + AssessmentLevel(title : String) : void
+  + fromString(title : String) : AssessmentLevel {static}
+}
+class BitOpExample $tag02{
+  - operation : ExampleType
+  - preSize : int 
+  - operand1 : String
+  - operand1Val : long
+  - operand2 : String
+  - operand2Val : long
+  - postSize : int 
+  - result : String
+  - resultVal : long
+  - timeout : int 
+  + BitOpExample() : void
+  + getOperation() : ExampleType
+  + setOperation(operation : ExampleType) : void
+  + getPreSize() : int 
+  + setPreSize(preSize : int) : void
+  + getOperand1() : String
+  + setOperand1(operand1 : String) : void
+  + getOperand1Val() : long
+  + setOperand1Val(operandVal1 : long) : void
+  + getOperand2() : String
+  + setOperand2(operand1 : String) : void
+  + getOperand2Val() : long
+  + setOperand2Val(operandVal2 : long) : void 
+  + getPostSize() : int 
+  + setPostSize(postSize : int) : void
+  + getResult() : String
+  + setResult(result : String) : void
+  + getResultVal() : String
+  + setResultVal(resultVal : long) : void
+  + getTimeOut() : int 
+  + setTimeOut(timeOut : int) : void
+  + generatedRandomOperands(bitSize : int) : void
+  - padLeftZeros(inputString : String, length : int) : String
+  + toString() : String
+}
+class BitOpStep $tag03 {
+  - example : BitOpExample
+  - isMultiStep : boolean 
+  + BitOpStep() : void
+  + getExample() : BitOpExample
+  + setExample(example : BitOpExample) : void
+  + isMultiStep() : boolean
+  + setisMultiStep(isMultiStep : boolean) : void
+}
+class CompletedStepStep $tag04 {
+}
+class CompleteTaskStep $tag05 {
+  + CompletedTaskStep() : void
+}
+class ContextualEnvironment $tag06 {
+}
+class EcodeAsciiExample $tag07 {
+  - stringLength : int 
+  - exampleString : String
+  - asiiEncoding : int[] 
+  - timeOut : int 
+  + EncodeAsciiExample(example : String) : void
+  + getStringLength() : int 
+  + setStringLength(stringLength : int) : void
+  + getExampleString() : String
+  + setExampleString(exampleString : String) : void
+  + getAsciiEncoding() : int[]
+  + setAsciiEncoding(asciiEncoding : int[]) : void
+  + getTimeOut() : int 
+  + setTimeOut(timeOut : int) : void
+}
+together { 
+  class EncodeAsciiStep $tag08 {
+    - example : EncodeAsciiExample
+    - currentIndex : int 
+    - multiStep : boolean
+    - outputListener : OutputListener
+    + EncodeAsciiStep() : void
+    + getExample() : EncodeAsciiExample
+    + setExample(example : EncodeAsciiExample) : void
+    + isMultiStep() : boolean
+    + setMultiStep(multiStep : boolean) : void
+  }
+  interface OutputListener $tag09 {
+    + appendText(text : String) : void
+    + encode() : String
+  }
+}
+enum ExampleType $tag10 {
+  ASCII_ENCODE
+  ADD_ONE_BIT
+  PAD_ZEROS
+  ADD_MSG_LENGTH
+  PREPARE_SCHEDULE
+  INITIALIZE_VARS
+  COMPRESS_ROUND
+  ROTATE_BITS
+  SHIFT_BITS
+  XOR_BITS
+  ADD_BITS
+  MAJORITY_FUNCTION
+  CHOICE_FUNCTION
+  SHA_ZERO
+  SHA_ONE
+  STEP_COMPLETION_REPLY
+  REQUEST_HINT
+  DEFAULT
+  - requestName : String
+  + ExampleType(requestName : String) : void
+  + getRequestName() : String
+  + toString() : String
+}
+class NewExampleRequest $tag11 {
+  - exampleType : ExampleType
+  - data : String
+  + NewExampleRequest() : void
+  + getExampleType : ExampleType
+  + setExampleType(exampleType : ExampleType) : void
+  + getData() : String
+  + setData(data : String) : void
+}
+enum OutcomeGranularity $tag12 {
+  COURSE
+  KNOWLEDGE_COMPONENT
+  UNIT
+}
+abstract Problem $tag12 {
+  # problemId : int 
+  # title : String
+  # description : String
+  + Problem() : void
+  + Problem(id : int) : void
+  + getTitle() : String
+  + setTitle(title : String) : void
+  + getDescription() : String
+  + setDescription(description : String) : void
+  + toString : String
+}
+together { 
+  class RotateStep $tag13 {
+    - direction : Direction
+    - amount : int 
+    - length : int 
+    - data : String
+    + RotateStep() : void
+    + getDirection() : Direction
+    + setDirection(direction : Direction) : void
+    + getAmount() : int 
+    + setAmount(amount : int) : void
+    + getLength() : int 
+    + setLength(length : int) : void
+    + getData() : String
+    + setData(data : String) : void
+  }
+  enum Direction $tag14 {
+    RIGHT
+    LEFT
+  }
+  Direction -l->RotateStep::direction
+}
+enum ScaffoldLevel $tag15 {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  EXTREME
+  - title : String
+  + ScaffoldLevel(title : String) : void
+  - title() : String
+  + fromString(title : String) : ScaffoldLevel {static}
+}
+enum StepSubType $tag16 {
+  INFO_MESSAGE
+  GUI_
+  ACTION
+  ENCODE_BINARY
+  ENCODE_HEX
+  ENCODE_ASCII
+  ADD_ONE_BIT
+  PAD_ZEROS
+  ADD_MSG_LENGTH
+  PREPARE_SCHEDULE
+  INITIALIZE_VARS
+  COMPRESS_ROUND
+  ROTATE_BITS
+  SHIFT_BITS
+  XOR_BITS
+  ADD_BITS
+  MAJORITY_FUNCTION
+  CHOICE_FUNCTION
+  STEP_COMPLETION_REPLY
+  REQUEST_HINT
+  DEFAULT
+  - subType : String
+  + StepSubType(subType : String) : void
+  + getSubType() : String
+  + toString() : String
+}
+class StudentModel $tag17 {
+  - userId : String
+  - assessments : HashMap<Integer, Assessment>
+  - scaffoldLevel = ScaffoldLevel
+  + StudentModel(userId : String) : void
+  + getUserId() : String
+  + setUserId(userId : String) : void
+  + addAssessment(knowledgeComponentId : int, assessment : Assessment) : void
+  + addAssessment(assessment : Assessment) : void
+  + containsAssessment(knowledgeComponentId : int) : boolean
+  + findAssessment(knowledgeComponentId : int) : Assessment
+  + getScaffoldLevel() : ScaffoldLevel
+  + setScaffoldLevel(scaffoldLevel : ScaffoldLevel) : void
+}
+enum TaskKind $tag18 {
+  PROBLEM
+  - title : String
+  + TaskKind(title : String) : void
+  + title() : String
+}
+class TaskState $tag19 {
+  - currentTask : int 
+  - currentStep : int 
+  - currentHint : int 
+  - completedSteps : LinkedList<StepCompletion>
+  + TaskState() : void
+  + getCurrentTask() : int 
+  + setCurrentTask(currentTask : int) : void
+  + incfTGask() : void
+  + getCurrentStep() : int 
+  + setCurrentStep(currentStep : int) : void
+  + incfStep() : void
+  + getCurrentHint() : int 
+  + setCurrentHint(currentHint : int) : void
+  + incfHint() : void
+  + addStepCompletion(step : StepCompletion) : void
+  + getCompletedSteps() : LinkedList<StepCompletion>
+  + setCompletedSteps(completedSteps : LinkedList<StepCompletion>) : void
+}
+class Timeout $tag20 {
+  # type : String
+  # seconds : int
+  # event : String
+  # text : String
+  + Timeout(type : String, seconds : int, event : String, text : String) : void
+  + getType() : String
+  + getSeconds() : int 
+  + getEvent() : String
+  + getText() : String
+}
+class Assessment extends Model
+abstract Problem extends Model
+@enduml

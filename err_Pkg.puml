@@ -1,0 +1,45 @@
+@startuml
+!include variables.puml
+
+class IllegalArgException $tag00 {
+  + IllegalArgException(msg: String) : void
+}
+
+class InconsistentDBException $tag01 {
+  + InconsistentDBException(msg: String) : void
+  + InconsistentDBException(msg: String, cause: Throwable) : void
+}
+
+class MissingPropertyException $tag02 {
+  + MissingPropertyException(property: String) : void
+  + MissingPropertyException(property: String, cause: Throwable) : void
+}
+
+class NonRecoverableException $tag03 {
+  + NonRecoverableException(msg: String) : void
+  + NonRecoverableException(msg: String, cause: Throwable) : void
+}
+
+class ObjNotFoundException $tag04 {
+  + ObjNotFoundException(msg: String) : void
+  + ObjNotFoundException(msg: String, cause: Throwable): void
+}
+
+abstract ShaTuException $tag05 {
+  + ShaTuException(msg: String) : void
+  + ShaTuException(msg: String, cause: Throwable) : void
+}
+
+class XmlException $tag06 {
+  + XmlException(msg: String) : void
+  + XmlException(msg: String, cause: Throwable) : void
+}
+'dependencies
+class IllegalArgException extends ShaTuException
+class InconsistentDBException extends NonRecoverableException
+class MissingPropertyException extends ShaTuException
+class NonRecoverableException extends ShaTuException
+class ObjNotFoundException extends ShaTuException
+abstract ShaTuException extends Exception
+class XmlException extends ShaTuException
+@enduml

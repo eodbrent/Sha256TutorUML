@@ -1,0 +1,88 @@
+@startuml
+!include variables.puml
+'___'
+
+class CourseDAO $tag00 {
+  + CourseDAO() : void
+  + retrieve(id: int) : Course
+  - extractKnowledgeComponents(parent: Element) \n: ArrayList<KnowledgeComponent>
+}
+
+abstract MySqlDAO $tag01 {
+  + DB_HOST_PROP : String     {static}
+  + DB_NAME_PROP : String     {static}
+  + DB_USER_PROP : String     {static}
+  + DB_PASS_PROP : String     {static}
+  + DRIVER : String           {static}
+  + URL : String              {static}
+  - LOGGER : Logger           {static}
+  + IS_LOADED : boolean       {static}
+  + MySqlDAO(): void
+  # close(conn: Connection, stmt: Statement) : void
+  # close(conn: Connection) : void
+  # close(stmt: Statement) : void
+  # rollback(conn: Connection): void
+}
+
+class SessionDAO $tag02 {
+  - DATA_DIRECTORY : String   {static}
+  + create(session: TutoringSession) : void
+  + retrieve(userId: String) : TutoringSession
+  + update(session: TutoringSession) : void
+  + delete(userId: String) : void
+  - delete(file: File) : void
+  - fullyQualifiedFileName(userId: String) : String
+}
+
+class StudentDAO $tag03 {
+  + create(student: Student) : void
+  + exists(userId: String) : boolean
+  + retrieve(userId: String) : Student
+  + findModelById(userId: String) : StudentModel
+  + delete(userId: String) : void
+}
+
+class StudentModelDAO $tag04 {
+  + StudentModelDAO(): void
+  + create(model: StudentModel) : void
+  + retrieve(userId: String) : StudentModel
+  + update(model: StudentModel) : void
+  + updateAssessment(model: StudentModel, 
+    assessment: Assessment, field: StudentModelFieldKind) : void
+  + delete(userId: String) : void
+  + exists(userId: String) : boolean
+  - exists(userId: String, conn: Connection) : boolean
+  - retrieveAssessments(userId: String, conn: Connection) \n: ArrayList<Assessment>
+}
+
+class UserDAO $tag05 {
+  + UserDAO(): void
+  + create(acct: Account) : void
+  + delete(userId: String) : void
+  + exists(userId: String) : boolean
+  + retrieve(userId: String) : User
+  + update(user: User, newPassword: String) : void
+  - exists(userId: String, conn: Connection) : boolean
+}
+
+class UserFileDAO $tag06 {
+  - DATA_DIRECTORY : String     {static}
+  + UserFieldDAO() : void
+  + create(acct: Account) : void
+  + delete(userId: String) : void
+  + retrieve(userId: String) : User
+  + update(user: User, newPassword: String) : void
+  + exists(userId: String): boolean
+  - fullyQualifiedName(userId: String) : String
+}
+
+'dependencies'
+class CourseDAO implements CourseSvc
+'MySqlDAO
+class SessionDAO implements SessionSvc
+class StudentDAO extends MySqlDAO implements StudentSvc
+class StudentModelDAO extends MySqlDAO implements StudentModelSvc
+class UserDAO extends MySqlDAO implements UserSvc
+class UserFileDAO implements UserSvc
+'end dependencies'
+@enduml

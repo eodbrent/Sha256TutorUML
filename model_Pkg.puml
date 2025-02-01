@@ -1,0 +1,525 @@
+@startuml
+!include variables.puml
+class Account $tag00 {
+  # userId : String
+  # password : String
+  # firstName : String
+  # lastName : String
+  + getUserId() : String
+  + setUserId(userId : String) : void
+  + getPassword() : String
+  + setPassword(password : String) : void
+  + getFirstName() : String
+  + setFirstName(firstName : String) : void
+  + getLastName() : String
+  + setLastName(lastName : String) : void
+  + clear() : void
+  + Account() : void
+}
+class AddOneStep $tag01 {
+  - messageLength : int 
+  - question : String
+  - result : String
+  - userAnswer : String
+  + AddOneStep() : void
+  + setMessageLength(messageLength : int) void
+  + getMessageLength() : int 
+  + setQuestion(question : String) : void
+  + getQuestion() : String
+  + setResult(newResult : String) : void
+  + getResult() : String
+  + setUserAnswer(userResponse : String) : void
+  + getUserAnswer() : String
+}
+class BitShiftStep $tag02 {
+  - operand : String
+  - result : String
+  - bitLength : int 
+  - shiftLength : int 
+  - shiftRight : boolean
+  + getOperand() : String
+  + setOperand(operand : String) : void
+  + getResult() : String
+  + setResult(result : String) : void
+  + getBitLength() : int 
+  + setBitLength(bitLength : int) : void
+  + getShiftLength() : int 
+  + setShiftLength(shiftLength : int) : void
+  + isShiftRight() : boolean
+  + setShiftRight(shiftRight : boolean) : void
+}
+enum BloomLevel $tag03 {
+  KNOWLEDGE
+  COMPREHENSION
+  APPLICATION
+  ANALYSIS
+  SYNTHESIS
+  EVALUATION
+  - title : String
+  + BloomLevel(title : String) : void
+  + title() : String
+}
+class ChoiceFunctionStep $tag03 {
+  - operand1 : String
+  - operand2 : String
+  - operand3 : String
+  - result : String
+  - isTruthTableVisible : boolean
+  - bitLength : int 
+  + getOperand1() : String
+  + setOperand1(operand1 : String) : void
+  + getOperand2() : String
+  + setOperand2(operand2 : String) : void
+  + getOperand3() : String
+  + setOperand3(operand3 : String) : void
+  + getResult() : String
+  + setResult(result : String) : void
+  + getBitLength() : int 
+  + setBitLength(bitLength : int) : void
+}
+class Course $tag05 {
+  - primaryPedagogy : TaskSelectionKind
+  - units : ArrayList<Unit>
+  # outcomes : ArrayList<KnowledgeComponent>
+  + Course() : void
+  + getPrimaryPedagogy() : TaskSelectionKind
+  + setPrimaryPedagogy(primaryPedagogy : TaskSelectionKind) : void
+  + getDigest() : CourseDigest
+  + currentUnit() : Unit
+  + addUnit(module : Unit) : void
+  + findUnit(id : int) : Unit
+  + findUnitBySequenceId(sequenceId : int) : Unit
+  + getUnits() : ArrayList<Unit>
+  + setUnits(units : ArrayList<Unit>) : void
+  + addOutcome(outcome : KnowledgeComponent) : void
+  + getOutcomes() : ArrayList<KnowledgeComponent>
+  + setOutcomes(outcomes : ArrayList<KnowledgeComponent>) : void
+  + findOutcome(knowledgeComponentId : int) : KnowledgeComponent
+  + findKnowledgeComponent(componentId : int) : KnowledgeComponent
+}
+class CourseDigest $tag06 {
+  + CourseDigest() : void
+  + CourseDigest(id : int) : void
+  + CourseDigest(id : int, title : String) : void
+}
+together { 
+  class EncodeAsciiStep $tag06 {
+    - source : String
+    - sourceEncoding : ENCODING
+    - target : String
+    - targetEncoding : ENCODING
+    + EncodeAsciiStep(source : String, target : String) : void
+    + getSource() : String
+    + setSource(source : String) : void
+    + getSourceEncoding() : ENCODING
+    + setSourceEncoding(sourceEncoding : ENCODING) : void
+    + getTarget() : String
+    + setTarget(target : String) : void
+    + getTargetEncoding() : ENCODING
+    + setTargetEncoding(targetEncoding : ENCODING) : void
+  }
+  enum ENCODING $tag07 {
+    BINARY
+    CHAR
+    DECIMAL
+    HEX
+    OCTAL
+  }
+  ENCODING -l-> EncodeAsciiStep::sourceEncoding
+  ENCODING -l-> EncodeAsciiStep::targetEncoding
+}
+class ExercisingLocation $tag08 {
+  - courseId : int 
+  - unitId : int 
+  - taskid : int 
+  - stepId : int 
+  + ExercisingLocation() : void
+  + getCourseId() : int 
+  + setCourseId(courseId : int) : void
+  + getUnitId() : int 
+  + setUnitId(unitId : int) : void
+  + getTaskId() : int 
+  + setTaskId(taskId : int) : void
+  + getStepId() : int 
+  + setStepId(stepId : int) : void
+}
+enum GuiGesture $tag09 {
+  REQUEST_HINT
+  NO_OP
+  - name : String
+  + GuiGesture(name : String) : void
+  + getName() : String
+  + toString() : String
+}
+class GuiStep $tag10 {
+  - gesture : GuiGesture
+  + GuiStep : void
+  + getGesture() : GuiGesture
+  + setGesture(gesture : GuiGesture) void
+}
+class Hint $tag11 {
+  - text : String
+  - sequenceId : int 
+  + Hint() : void
+  + Hint(id : int) : void
+  + getText() : String
+  + setText(text : String) : void
+  + getSequenceId() : int 
+  + setSequenceId(sequenceId : int) : void
+}
+class InformationStep $tag12 {
+  - msg : String
+  + InformationStep() : void
+  + getMsg() : String
+  + setMsg(msg : String) : void
+}
+class KnowledgeComponent $tag13 {
+  # bloomLevel : BloomLevel
+  # granularity : OutcomeGranularity
+  # pedagogy : TaskSelectionKind
+  - isDomainFocus : boolean
+  - exercisingLocations : ArrayList<ExercisingLocation>
+  + KnowledgeComponent(id : int) : void
+  + getBloomLevel() : BloomLevel
+  + setBloomLevel(bloomLevel : BloomLevel) : void
+  + getGranularity() : OutcomeGranularity
+  + setGranularity(granularity : OutcomeGranularity) : void
+  + getPedagogy() : TaskSelectionKind
+  + setPedagogy(pedagogy : TaskSelectionKind) : void
+  + isDomainFocus() : boolean
+  + getIsDomainFocus() : boolean
+  + setIsDomainFocus(isDomainFocus : boolean) : void
+  + addExercisingLocation(location : ExercisingLocation) : void
+  + getExercisingLocation() : ArrayList<ExercisingLocation>
+  + setExercisingLocations(exercisingLocation : ArrayList<ExercisingLocation>)
+}
+enum KnowledgeComponentKind $tag14 {
+  INFORMATION_MESSAGE
+  CHOICE_FUNCTION
+  - title : String
+  - dbId : int 
+  + KnowledgeComponentKind(title : String, dbId : int) : void
+  + title() : String
+  + dbId() : int 
+  + fromString(title : String) : KnowledgeComponentKind {static}
+}
+class LaunchInfo $tag15 {
+  - userId : String 
+  - sessionId : String
+  + LaunchInfo(userid : String, sessionId : String) : void
+  + getUserId() : String
+  + setUserid(userId : String) : void
+  + getSessionId() : String
+  + setSessionId(sessionId : String) : void
+}
+class LaunchReply $tag16 {
+  - status : String
+  - errType : String
+  - session : TutoringSession
+  + LaunchReply() : void
+  + getStatus() : String
+  + setStatus(status : String) : void
+  + getErrType() : String
+  + setErrType(errType : String) : void
+  + getSession() : TutoringSession
+  + setSession(sessioin : TutoringSession)
+}
+class MajorityStep $tag17 {
+  - operand1 : String
+  - operand2 : String
+  - operand3 : String
+  - result : String
+  - isTruthTableVisible : boolean
+  - bitLength : int 
+  + getOperand1() : String
+  + setOperand1(operand1 : String) : void
+  + getOperand2() : String
+  + setOperand2(operand2 : String) : void
+  + getOperand3() : String
+  + setOperand3(operand3 : String) : void
+  + getResult() : String
+  + setResult(result : String) : void
+  + getBitLength() : int 
+  + setBitLength(bitLength : int) : void  
+}
+abstract Model $tag18 {
+  + DEFAULT_ID : int {static}
+  # id : int 
+  + Model() : void
+  + Model(id : int) : void
+  + getId() : int 
+  + setId(id : int) : void
+  + hashCode() : int 
+  + equals(obj : Object) : boolean
+  + toString() : String
+}
+class Pad0Step $tag19 {
+  - messageLength : int 
+  - question : String
+  - correctAnswer : int 
+  - userAnswer : String
+  + Pad0Step() : void
+  + setMessageLength(messageLength : int) : void
+  + getMessageLength() : int 
+  + setQuestion(question : String) : void
+  + getQuestion() : String
+  + setResult(newResult : int) : void
+  + getResult() : int 
+  + setUserAnswer(userResponse : String) : void
+  + getUserAnswer() : String
+}
+class SignInresult $tag20 {
+  - status : String
+  - sessionId : String
+  + SignInResult() : void
+  + getStatus() : String
+  + setStatus(status : String) : void
+  + getSessionId() : String
+  + setSessionId(sessionId : String) : void
+}
+class Step $tag21 {
+  - scaffolding : ScaffoldLevel
+  - subType : StepSubType
+  # sequenceId : int 
+  # currentHintIndex : int 
+  # hints : ArrayList<Hint>
+  # timeout : Timeout
+  # notifyTutor : boolean
+  # isCompleted : boolean
+  # exercisedComponentIds : ArrayList<Integer>
+  - data : String
+  + Step(id : int, sequenceId : int, subType : StepSubType) : void
+  + getSubType() : StepSubType
+  + setSubType(subType : StepSubType) : void
+  + getScaffolding : ScaffoldLevel
+  + setScaffolding(scaffolding : ScaffoldLevel) : void
+  + getHints : ArrayList<Hint>
+  + findHintById(id : int) : Hint
+  + getSequenceId() : int 
+  + getTimeout() : Timeout
+  + setTimeout(timeout : Timeout) : void
+  + addHint(hint : Hint) : void
+  + getCurrentHint() : Hint
+  + getCurrentHintIndex() : int 
+  + setCurrentHintIndex(currentHint : int) : void
+  + isNotifyTutor() : boolean
+  + setNofityTutor(notifyTutor : boolean) : void
+  + isCompleted() : boolean
+  + setIsCompleted(isCompleted : boolean) : void
+  + addExercisedComponentId(componentId : int) : void
+  + getExercisedComponentIds() : ArrayList<Integer>
+  + setExercisedComponentIds(componentIds : ArrayList<Integer>) : void
+  + getData() : String
+  + setData(data : String) : void
+}
+class StepCompletion $tag22 {
+  - step : Step
+  - date : long
+  - timeoutOccur : boolean
+  - hintsGiven : int 
+  - data : String
+  + StepCompletion(step : Step, data : String) : void
+  + getStep() : Step
+  + setStep(step : Step) : void
+  + getData() : String
+  + setData(data : String) : void
+  + getDate() : long
+  + setDate(date : long) : void
+  + isTimeoutOccur() : boolean
+  + setTimeoutOccur(timeoutOccur : boolean) : void
+  + getHintsGiven() : int 
+  + setHintsGiven(hintsGiven : int) : void
+}
+class StepCompletionReply $tag23 {
+  - isCorrect : boolean
+  - isRepeatStep : boolean
+  - isNewTask : boolean
+  - isNewStep : boolean
+  - isNextStep : boolean
+  - correctAnswer : String
+  - response : String
+  - data : String
+  + StepCompletionReply() : void
+  + getIsCorrect() : boolean
+  + setIsCorrect(isCorrect : boolean) : void
+  + isRepeateStep() : boolean
+  + getIsRepeatStep() : boolean
+  + setIsRepeatStep(isRepeatStep : boolean) : void
+  + isNewTask() : boolean
+  + getIsNewTask() : boolean
+  + setIsNewTask(isNewTask : boolean) : void
+  + isNewStep() : boolean
+  + getIsNewStep() : boolean
+  + setIsNewStep(isNewStep : boolean) : void
+  + isNextStep() : boolean
+  + getIsNextStep() : boolean
+  + setIsNextStep(isNextStep : boolean) : void
+  + getCorrectAnswer() : String
+  + setCorrectAnswer(correctAnswer : String) : void
+  + getResponse() : String
+  + setResponse(response : String) : void
+  + getData() : String
+  + setData(data : String) : void
+}
+class Student $tag24 {
+  # firstName : String
+  # lastName : String
+  - studentModel : StudentModel
+  + Student() : void
+  + Student(userId : String, password : String) : void
+  + getFirstName() : String
+  + setFirstName(firstName : String) : void
+  + getLastName() : String
+  + setLasntName(lastName : String) : void
+  + getStudentModel() : StudentModel
+  + setStudentModel(studentModel : StudentModel) : void
+  + toString() : String
+}
+enum StudentModelFieldKind $tag25 {
+  ASSESSMENT_LEVEL
+  ATTEMPTS
+  SUCCESSES
+  ALL
+  - title : String
+  + StudentModelFieldKind(title : String) : void
+  + title() : String
+}
+class Task $tag25 {
+  - kind : TaskKind
+  - type : ExampleType
+  - scaffolding : ScaffoldLevel
+  - sequenceId : int 
+  - currentStepIndex : int 
+  - steps : ArrayList<Step>
+  - problem : Problem
+  - statke : TaskState
+  # exercisedComponentIds : ArrayList<Integer>
+  + Task() : void
+  + Task(id : int) : void
+  + getKind() : TaskKind
+  + setKind(kind : TaskKind) : void
+  + getType() : ExampleType
+  + setType(type : ExampleType) : void
+  + getScaffolding() : ScaffoldLevel
+  + getState() : TaskState
+  + setState(state : TaskState) : void
+  + addStep(step : Step) : void
+  + getSteps() : ArrayList<Step> 
+  + setSteps(steps : ArrayList<Step>) : void
+  + getStep(index : int) : Step
+  + lastStep() : Step
+  + currentStep() : Step
+  + completedStep(completion : StepCompletion) : void
+  + isTaskCompleted() : boolean
+  + getProblem() : Problem
+  + setProblem(problem : Problem) : void
+  + getSequenceId() : int 
+  + getCurrentStep(): Step
+  + getCurrentStepIndex() : int 
+  + setCurrentStepIndex(currentStepIndex : int) : void
+  + addExercisedComponentId(componentId : int) : void
+  + getExercisedComponentIds() : ArrayList<Integer>
+  + setExercisedComponentIds(componentIds : ArrayList<Integer>) : void
+}
+class TaskCompletion $tag26 {
+  - stepsCompleted : ArrayList<Step>
+}
+enum TaskSelectioinKind $tag27 {
+  STUDENT_CHOICE
+  FIXED_SEQUENCE
+  MASTERY_ LEARNING
+  MICROADAPTATION
+  OTHER
+  ERROR
+  - title : String
+  + TaskSelectionKind(title : String) : void
+  + getTitle() : String
+}
+abstract TitledModel $tag28 {
+  # title : String
+  # description : String
+  + TitledModel() : void
+  + TitledModel(id : int) : void
+  + getTitle() : String
+  + setTitled(title : Title) : void
+  + getDescription() : String
+  + setDescription(description : String) : void
+}
+class TutoringSession $tag29 {
+  - securirtyToken : String
+  - account : Account
+  - student : Student
+  - course : CourseDigest
+  - unit : UnitDigest
+  - isActive : boolean
+  - startDate : GregorianCalendar
+  - tasks : ArrayList<Task>
+  + TutoringSession() : void
+  + getSecurityToken() : String
+  + setSecurityToken(securityToken : String) : void
+  + getStudent() : Student
+  + setStudent(student : Student) : void
+  + getAccount() : Account
+  + setAccount(account : Account) : void
+  + getCourse() : CourseDigest
+  + setCourse(course : CourseDigest) : void
+  + getUnit() : UnitDigest
+  + setUnit(unit : UnitDigest) : void
+  + isIsActive() : boolean
+  + setIsActive(isActive : boolean) : void
+  + getStartDate() : GregorianCalendar
+  + setStartDate(startDate : GregorianCalendar) : void
+  + currentTask() : Task
+  + addTask(task : Task) : void
+  + addCurrentTask(task : Task) : void
+  + getTasks() : ArrayList<Task>
+  + setTasks(tasks : ArrayList<Task>) : void
+  + removeTask(task : Task) : void
+  + removeTask(taskId : int) : void
+}
+class Unit $tag30 {
+  - digest : UnitDigest
+  - pedagogy : TaskSelectionKind
+  - sequenceId : int 
+  - tasks : ArrayList<Task>
+  + Unit() : void
+  + Unit(id : int) : void
+  + getSequenceId() : int 
+  + setSequenceId(sequenceId : int) : void
+  + getDigest() : UnitDigest
+  + getPedagogy() : TaskSelectionKind
+  + setPedagogy(pedagogy : TaskSelectionKind) : void
+  + addTask(task : Task) : void
+  + getTasks() : ArrayList<Task>
+  + setTasks(tasks : ArrayList<Task>) : void
+  + findTaskBySequence(sequence : int) : Task
+}
+class UnitDigest $tag31 {
+  + UnitDigest() : void
+  + UnitDigest(id : int) : void
+}
+class User $tag32 {
+  # userid : String
+  # password : String
+  + User() : void
+  + User(userId : String) : void
+  + User(userId : String, password : String) : void
+  + getUserId() : String
+  + setUserId(userId : String) : void
+  + getPassword() : String
+  + setPassword(password : String) : void
+  + toString() : String
+}
+class Course extends TitledModel
+class CourseDigest extends TitledModel
+class Hint extends Model
+class KnowledgeComponent extends TitledModel
+abstract Model implements Serializable
+class Step extends TitledModel
+class Student extends User
+class Task extends TitledModel
+abstract TitledModel extends Model
+class Unit extends TitledModel
+class UnitDigest extends TitledModel
+class User extends Model
+@enduml

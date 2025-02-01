@@ -1,0 +1,62 @@
+@startuml
+!include variables.puml
+class CreateAcctAction $tag00 {
+  - LOGGER : logger {static}
+  - SINGLETON : CreateAcctAction {static}
+  + instance() : CreateAcctAction {static}
+  - CreateAcctAction() : void
+  + actionPerformed(evt : ActionEvent) : void
+}
+class HintAction $tag01 {
+  - LOGGER : logger {static}
+  - SINGLETON : HintAction {static}
+  + instance() : HintAction {static}
+  - HintAction() : void
+  + actionPerformed(evt : ActionEvent) : void
+}
+class NewExampleAction $tag02 {
+  - LOGGER : Logger {static}
+  - SINGLETON : NewExampleAction {static}
+  + instance() : NewExampleAction {static}
+  - NewExampleAction() : void
+  + actionPerformed(evt : ActionEvent) : void
+}
+class NewUserAction $tag03 {
+  - SINGLETON : NewUserAction {static}
+  + instance() : NewUserAction {static}
+  - NewUserAction() : void
+  + actionPerformed(evt : ActionEvent) : void  
+}
+class SaveSessionAction $tag04 {
+  - SINGLETON : SaveSessionAction {static}
+  + instance() : SaveSessionAction {static}
+  - SaveSessionAction() : void
+  + actionPerformed(evt : ActionEvent) : void
+}
+abstract ShaTuGuiAction $tag05 {
+  + ShaTuGuiAction(name : String) : void
+  # loadIcon(imageFileName : String, altText : String) : ImageIcon
+}
+class SignInAction $tag06 {
+  - LOGGER : logger {static}
+  - SINGLETON : SignInAction {static}
+  + instance() : SignInAction {static}
+  - SignInAction() : void
+  + actionPerformed(evt : ActionEvent) : void
+}
+class StepCompletionAction $tag07 {
+  - LOGGER : Logger {static}
+  - SINGLETON : StepCompletionAction {static}
+  + instance() : StepCompletionAction {static}
+  - StepCompletionAction() : void
+  + actionPerformed(evt : ActionEvent) : void 
+}
+class CreateAcctAction extends ShaTuGuiAction
+class HintAction extends ShaTuGuiAction
+class NewExampleAction extends ShaTuGuiAction
+class NewUserAction extends ShaTuGuiAction
+class SaveSessionAction extends ShaTuGuiAction
+abstract ShaTuGuiAction extends AbstractAction
+class SignInAction extends ShaTuGuiAction
+class StepCompletionAction extends ShaTuGuiAction
+@enduml

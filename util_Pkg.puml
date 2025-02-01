@@ -1,0 +1,36 @@
+@startuml
+!include variables.puml
+class ImgFactory $tag00 {
+  - DIRECTORY : String      {static}
+  - SUFFIX : String         {static}
+  + createIcon(fileName: String, altText: String) : ImageIcon   {static}
+  + createImage(fileName: String) : BufferedImage {static}
+}
+
+class ResourceMgr $tag01{
+  - LOGGER : Logger      {static}
+  - SINGLETON : ResourceMgr {static}
+  - PROPERTY_FILE_PATH : String    {static}
+  - LANGUAGE_PROP : String    {static}
+  - COUNTRY_PROP : String    {static}
+  - UI_RESOURCE_PATH : String    {static}
+  + instance() : ResourceMgr {static}
+  - properties : Properties
+  - local : Locale
+  - msgs : ResourceBundle
+  - ResourceMgr() : void
+  + getLocale() : Locale
+  + string(key: String) : String
+  + getProp() : String
+  - loadProps(path: String) : void
+  
+}
+
+class XmlMgr $tag02 {
+  - LOGGER : Logger    {static}
+  - DATA_DIRECTORY : String  {static}
+  + SINGLETON : XmlMgr {static}
+  + instance
+}
+
+@enduml

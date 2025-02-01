@@ -1,0 +1,82 @@
+@startuml ShaTuTutor
+skinparam defaultTextAlignment center
+skinparam Sequence {
+    DividerBackgroundColor #darkblue
+    DividerFontColor #f2c300
+    DividerFontName Courier New
+    GroupHeaderFontName Courier New
+    GroupHeaderFontSize 18
+    GroupHeaderFontStyle bold
+}
+title ShaTuTutor Sequence Diagram
+
+hide footbox
+box #LightPink
+actor Client
+end box
+box #LightBlue
+Participant Server
+end box
+box #SteelBlue
+database Database
+end box
+== User Opens Application ==
+group #Yellow <font color="Gold"><back:LimeGreen><b>NEW USER</b>
+    Client -> Client: New User
+    Client -> Server: Submit Info
+    activate Server
+    Server -> Database: Validate New Account Info
+    activate Database
+    Database --> Server: Return Error Or Success
+    deactivate Database 
+    Server --> Client: Error: Account already exists
+else #LightGreen
+    Server --> Client: Success
+    deactivate Server
+end
+Client -> Server: Submit Email and Password
+group #CCCCEE Account Exists
+    Server -> Database: Validate Credentials
+    group #LightGreen Credentials Valid
+        activate Database
+        Database --> Server: Credentials Valid
+        Server --> Client: Login Success
+        Client -> Client: Display <font:courier><size:15><font color="Violet"><b>DASHBOARD
+    else #Salmon Credentials Invalid
+        Database --> Server: Invalid Login/Password
+        Server --> Client: Login Failure
+        Client -> Client: Prompt Retry if < 3 attempts
+    end
+else #Salmon Account Does Not Exist
+    Database --> Server: Email not found
+    deactivate Database
+    Server --> Client: Error: Account Not Found
+    Client -> Client: Prompt <font:courier><size:15><font color="Gold"><b>NEW USER
+end
+group #LightSkyBlue <font color="Violet"><b>DASHBOARD</b></font>
+    Client -> Client: Practice
+    Client -> Client: Display <font:courier><size:15><font color="Indigo"><b>MAIN VIEW
+end
+== User Is Logged In ==
+note left of Client #Aqua
+General View Shown 
+- fundementally all views are similar
+end note   
+group #MediumSeaGreen <font color="LightSlateGray"><back:Indigo><b>MAIN VIEW
+    Client -> Client: Rotate N Bits View button
+    Client -> Server: New Example
+    activate Server
+    Server --> Client: Example Returned to View
+    deactivate Server
+    Client -> Server: Check Button
+    activate Server
+    Server -> Server: Calculate/Validate Answer
+    Server -> Database: Store Exposure/Success    
+else #LightGreen
+    Server --> Client: Send Correct / Show message
+else #Salmon
+    Server --> Client: Send Incorrect / Show message
+    deactivate Server
+end
+== User Logs Out ==
+@enduml

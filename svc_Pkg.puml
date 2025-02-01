@@ -1,0 +1,239 @@
+@startuml
+!include variables.puml
+
+class ClientRequest $tag00 {
+  - requestType : ServerRequestType
+  - userId : String
+  - sessionId : String
+  - data : String
+  + ClientRequest(requestType: ServerRequestType) : void
+  + getRequestType() : ServerRequestType
+  + setRequest(requestType: ServerRequestType) : void
+  + getUserId() : String
+  + setUserId(userId: String) : void
+  + getSessionId() : String
+  + setSessionId(sessionId: String) : void
+  + getData() : String
+  + setData(data: String) : void
+}
+
+interface CourseSvc $tag01  {
+  retrieve(id: int) : Course
+}
+
+interface SHA256Svc $tag02 {
+  
+}
+
+class SHA_256 $tag03 {
+  - SINGLETON : SHAT_256     {static}
+  + instance() : SHA_256     {static}
+  - isSendCallbacks : boolean
+  - listeners : ARRAYLIST<SHA_256Listener>
+  - K : int[]                {static}
+  - H0 : int[]               {static}
+  - BLOCK_BITS : int         {static}
+  - BLOCK_BYTES : int        {static}
+  - w : int[]
+  - h : int[]
+  - temp : int[]
+  - SHA_256(): void
+  + isSendCallbacks() : boolean
+  + setIsIgnoreCallbacks(isSendCallbacks: boolean) : void
+  + addListener(listener: SHA_256Listener) : void
+  + removeListener(listener: SHA_256Listener) : void
+  + sha256(msg: String) : String
+  - hexToBin(hexString: String) : String      {static}
+  - bytesToHex(hash: byte[]) : String         {static}
+  + hash(message: byte[]) : byte[]
+  + pad(message: byte[]) : int[]
+  - toByteArray(ints: int[]) : byte[]
+  - ch(x: int, y: int, z: int) : int
+  - maj(x: int, y: int, z: int) : int
+  - bigSig0(x: int) : int
+  - bigSig1(x: int) : int
+  - smallSig0(x: int) : int
+  - smallSig1(x: int) : int
+  + padLeftZeros(inputString: String, length: int) : String
+}
+
+interface SHA_256Listener $tag04 {
+  + notifyAsciiEncoding(bytes: byte[])
+}
+
+enum ServerRequestType $tag05 {
+  COMPLETED_STEP
+  completed_Task
+  CREATE_ACCOUNT
+  NEW_EXAMPLE
+  SIGN_IN
+  REQUEST_HINT
+  - requestName : String
+  + ServerRequestType(requestName: String) : void
+  + getRequestName() : String
+  + toString() : String
+}
+
+class ServiceFactory $tag06 {
+  + findCourseSvc() : CourseSvc       {static}
+  + findSessionSvc() : SessionSvc     {static}
+  + findStudentSvc() : StudentSvc     {static}
+  + findStudentModelSvc() : StudentModelSvc {static}
+  + findUserSvc() : UserSvc           {static}
+}
+
+interface SessionSvc $tag07 {
+  + create(session: TutoringSession) : void
+  + retrieve(userId: String) : TutoringSession
+  + update(session: TutoringSession) : void
+  + delete(userId: String) : void
+}
+
+together {
+  class ShaTuServer $tag08 {
+    + PORT : int            {static}
+    - LOGGER : Logger       {static}
+    - server : ServerSocket
+    + ShaTuServer() : void
+    + run() : void
+  }
+  class ShaTuConnection {
+    - client : Socket
+    - in : BufferedReader
+    - out : PrintWriter
+    - tutor : TutorSvc
+    + ShaTuConnecction(client: Socket) : void
+    + run() : void
+  }
+}
+class ShaTuTutor $tag09 {
+  - DEFAULT_COURSE_ID : int        {static}
+  - MAX_ASCII_SIZE : int           {static}
+  - MAX_BITS_SIZE : int            {static}
+  - session : TutoringSession
+  - student : Student
+  - studentModel : StudentModel
+  - gson : Gson
+  + ShaTuTutor() : void
+  + request(request: ClientRequest) : TutorReply
+  + createAccount(jsonAcct: String) : TutorReply
+  + signIn(jsonUser: String) : TutorReply
+  + requestHint(jsonObj: String) : TutorReply
+  + completedStep(jsonObj: String): TutorReply
+  + completeRotateStep(completion: StepCompletion) : TutorReply
+  + completeInfoMsgStep(completion: StepCompletion) : TutorReply
+  + completeEncodeStep(completion: StepCompletion) : TutorReply
+  + completeAddOneStep(completion: StepCompletion) : TutorReply
+  + completePadZerosStep(completion: StepCompletion) : TutorReply 
+  + completeAddMsgLenStep(completion: StepCompletion) : TutorReply
+  + completePrepareScheduleStep(completion: StepCompletion) : TutorReply
+  + completeInitVarsStep(completion: StepCompletion) : TutorReply
+  + completeCompressRoundStep(completion: StepCompletion) : TutorReply
+  + completeShiftBitsStep(completion: StepCompletion) : TutorReply
+  + completeXorBitsStep(completion: StepCompletion) : TutorReply
+  + completeAddBitsStep(completion: StepCompletion) : TutorReply
+  + completeMajorityStep(completion: StepCompletion) : TutorReply
+  + completeChoiceStep(completion: StepCompletion) : TutorReply
+  + completedTask(taskInfo: String) : TutorReply
+  + newExample(json: String) : TutorReply
+  - createSession(account: Account, course: Course) : TutoringSession
+  - createStudent(student: Student, course: Course, session: TutoringSession) : Student
+  - verifySession(userId: String, sessionId: String) : TutoringSession
+  - getFirstTask(course: Course) : Task
+  - newAddOneBitExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newPadZerosExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newAddMsgLenExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newPrepareScheduleExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newInitializeVarsExample(session: TutoringSession, jsonData: String) : TutorReply    
+  - newCompressRoundExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newRotateBitsExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newShiftBitsExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newXorBitsExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newAddBitsExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newMajorityFunctionExample(session: TutoringSession, jsonData: String) : TutorReply
+  - newChoiceFunctionExample(session: TutoringSession, jsonData: String) : TutorReply
+  - bitShiftFunction(operand: String, shiftLength: int, shiftRight: boolean, bitLength, int) : String
+  - addBitsFunction(operand1: String, operand2: String, m: int) : String
+  - choiceFunction(x: String, y: String, z: String, bitLength: int) : String
+  - addOneFunction(question: String) : String
+  - majorityFunction(x: String, y: String, z: String, bitLength: int) : String
+  - calculateZerosNeededForPadding(messageLength: int) : int
+  - formatResult(answer: long, bitLength: int) : String
+  - generateInputString(problemSize: int) : String
+  - createError(errMsg: String, ex: Exception) : TutorReply
+  - generateRandomString(length: int) : String
+  - hintEncode(completion: StepCompletion) : TutorReply
+  - hintAddOne(completion: StepCompletion) : TutorReply
+  - hintPadZeros(completion: StepCompletion) : TutorReply
+  - hintAddMsgLen(completion: StepCompletion) : TutorReply
+  - hintPrepareSchedule(completion: StepCompletion) : TutorReply
+  - hintInitVars(completion: StepCompletion) : TutorReply
+  - hintCompressRound(completion: StepCompletion) : TutorReply
+  - hintRotateBits(completion: StepCompletion) : TutorReply
+  - hintShiftBits(completion: StepCompletion) : TutorReply
+  - hintXorBits(completion: StepCompletion) : TutorReply
+  - hintAddBits(completion: StepCompletion) : TutorReply
+  - hintMajorityFunction(completion: StepCompletion) : TutorReply
+  - hintChoiceFunction(completion: StepCompletion) : TutorReply
+}
+
+interface StudentModelSvc $tag10 {
+  + create(model: StudentModel) : void
+  + retrieve(userId: String) : StudentModel
+  + update(model: StudentModel) : void
+  + updateAssessment(model: StudentModel, \nassessment: Assessment, field: StudentModelFieldKind) : void
+  + delete(userId: String) : void
+  + exists(userId: String) : boolean
+}
+
+interface StudentSvc $tag11 {
+  + create(student: Student) : void
+  + exists(userId: String) : boolean
+  + retrieve(userId: String) : Student
+  + findModelById(userId: String) : StudentModel
+  + delete(userId: String) : void
+}
+
+class SvcFacade $tag12 {
+  - SINGLETON : SvcFacade           {static}
+  + instance() : SvcFacade          {static}
+  - LOGGER : Logger                 {static}
+  - SERVER : String                 {static}
+  - PORT : int                      {static}
+  - SvcFacade() : void
+  + tutorRequest(request: ClientRequest) : TutorReply
+  - send(request: String) : String
+}
+
+class TutorReply $tag13 {
+  - status : String
+  - data : String
+  + TutorReply() : void
+  + TutorReply(status: String) : void
+  + TutorReply(status: String, data: String) : void
+  + getStatus() : String
+  + setStatus(status: String) : void
+  + getData() : String
+  + setData(data: String) : void
+}
+
+interface TutorSvc $tag14 {
+  + request(clientRequest: ClientRequest) : TutorReply
+}
+
+interface UnitSvc $tag15 {
+  + findById(id: int) : Unit
+}
+
+interface UserSvc $tag16 {
+  + create(user: Account) : void
+  + retrieve(userId: String) : User
+  + update(user: User, newPassword: String) : void
+  + delete(userId: String) : void
+  + exists(userId: String) : boolean
+}
+'dependencies'
+class ShaTuServer implements Runnable
+class ShaTuConnection implements Runnable
+class ShaTuTutor implements TutorSvc
+@enduml

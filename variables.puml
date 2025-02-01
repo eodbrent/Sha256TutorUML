@@ -1,0 +1,43 @@
+@startuml
+set separator none
+skinparam legend{
+  BackgroundColor #f2c300
+  FontSize 14
+  FontColor DarkBlue
+  BorderColor DarkBlue
+}
+<style>
+classDiagram {
+  class {
+      ' attributes and methods
+      FontColor MidnightBlue
+      BackgroundColor AliceBlue
+      ' class name
+      header {
+        FontSize 20
+        FontColor MidnightBlue
+        FontStyle bold
+        BackgroundColor Application
+      }
+  }
+}
+
+</style>
+'choose target class, logic only implemented in view_pkg.pml'
+'  works, but still not including all dependency data'
+!$target_class = "RotateView" 
+legend left
+<u><b>Key Terms</b></u>
+<b>Step</b> - refers to a tracked tutoring action, such as the completion of a completeStep.
+<b>Operation</b>- refers to each individual action within the algorithm
+<b>Task</b> - refers to a learning outcome-related action or assignment.
+<b>Issue</b> - refers to tasks or items tracked in Jira.
+
+<u><b>Diagram Key</b></u>
+|= field |= method |=  |
+| <img:https://plantuml.com/private-field.png>         | <img:https://plantuml.com/private-method.png>         | private |
+| <img:https://plantuml.com/protected-field.png>       | <img:https://plantuml.com/protected-method.png>       | protected |
+| <img:https://plantuml.com/package-private-field.png> | <img:https://plantuml.com/package-private-method.png> | package private |
+| <img:https://plantuml.com/public-field.png>          | <img:https://plantuml.com/public-method.png>          | public |
+end legend
+@enduml

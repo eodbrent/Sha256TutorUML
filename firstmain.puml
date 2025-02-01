@@ -1,0 +1,599 @@
+/' In hindsight, I'd rather you got the jar file and GraphViz (probably not required) stuff from the source. 
+ Below are the relevant links
+ https://plantuml.com/
+ https://plantuml.com/starting
+ https://plantuml.com/download I just got the first GPL jar file.
+ https://github.com/plantuml/plantuml/releases/download/v1.2024.7/plantuml-1.2024.7.jar
+ Brackets with the plantuml plugin is 100% free
+ Pladitor is the plantuml specific IDE, it has a free version with less capabilities
+ command line: 
+ java -jar plantuml.jar viewPackage.puml 
+'/
+@startuml
+set separator none
+skinparam legend{
+  BackgroundColor #f2c300
+  FontSize 14
+  FontColor DarkBlue
+  BorderColor DarkBlue
+}
+legend left
+<u><b>Key Terms</b></u>
+<b>Step</b> - refers to a tracked tutoring action, such as the completion of a completeStep.
+<b>Operation</b>- refers to each individual action within the algorithm
+<b>Task</b> - refers to a learning outcome-related action or assignment.
+<b>Issue</b> - refers to tasks or items tracked in Jira.
+
+<u><b>Diagram Key</b></u>
+|= field |= method |=  |
+| <img:https://plantuml.com/private-field.png>         | <img:https://plantuml.com/private-method.png>         | private |
+| <img:https://plantuml.com/protected-field.png>       | <img:https://plantuml.com/protected-method.png>       | protected |
+| <img:https://plantuml.com/package-private-field.png> | <img:https://plantuml.com/package-private-method.png> | package private |
+| <img:https://plantuml.com/public-field.png>          | <img:https://plantuml.com/public-method.png>          | public |
+
+end legend
+
+class "Add1View" {
+  - stepDataModel: AddOneStep
+  - source: JLabel
+  - hintsrequested: int
+  - wasHintRequested: boolean
+  - random: Random            {static}
+  - gson: Gson
+  + Add1View()
+  + actionPerformed(event: ActionEvent): void
+  - initializeComponents(): void
+  - initializeLayout(): void
+  + submitAnswer(): void
+  + requestHint(): void
+  + convertMessageToBinaryWithSpaces(message: String): String
+  + setModel(model: TutoringSession): void
+  - updateView(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class "AddMod256Label" {
+  + SIZE: int                   {static}
+  + HALF_SIZE: int              {static}
+  - NORMAL_BORDER: Border       {static}
+  - HIGHLIGHT_BORDER: Border    {static}
+  - NORMAL_BACKGROUND: Color    {static}
+  - HIGHLIGHT_BACKGROUND: Color {static}
+  - SELECTED_BACKGROUND: Color  {static}
+  - stepSelection: StepSelection
+  - isSelected: boolean
+  + AddMod256Label(): void
+  + select(): void
+  + deselect(): void
+  + paintComponent(g: Graphics): void
+  + mouseClicked(evt: MouseEvent): void
+  + mouseEntered(e: MouseEvent): void
+  + mouseExited(e: MouseEvent): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class AddTwoBitView {
+  - m: int
+  - binary1: String
+  - binary2: String
+  + AddTwoBitView(): void
+  + actionPerformed(event: ActionEvent): void
+  - calculateModulo(binary1: String, binary2: String): String
+  + keyPressed(e: KeyEvent): void
+  - verifyAnswer(): void
+  - onCheckButton(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+  # updateView(): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class BitOpLabel {
+  + SIZE: int                   {static}
+  + HALF_SIZE: int              {static}
+  - EMPTY_BORDER: Border        {static}
+  - NORMAL_BORDER: Border       {static}
+  - HIGHLIGHT_BORDER: Border    {static}
+  - NORMAL_BACKGROUND: Color    {static}
+  - HIGHLIGHT_BACKGROUND: Color {static}
+  - SELECTED_BACKGROUND: Color  {static}
+  - stepSelection: StepSelection
+  - isSelected: boolean
+  + BitOpLabel(text: String)
+  + select(): void
+  + deselect(): void
+  + getSize(): int
+  + mouseClicked(evt: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + mouseExited(e: MouseEvent): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class ChoiceFunctionView {
+  - stringX: String
+  - stringY: String
+  - stringZ: String
+  - problemSize: int
+  + ChoiceFunctionView(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletion
+  + actionPerformed(event: ActionEvent): void
+  + keyPressed(e: KeyEvent): void
+  - onNextHint(): void
+  - onCheckButton(): void
+  # updateView(): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class CompressionCanvasView {
+  - WORKING_VARS_LEN: int  {static}
+  - MOD_ADDITIONS_LEN: int {static}
+  - LEFT_INDENT: int       {static}
+  - ASCII_A_VAL: int       {static}
+  - inWorkingVars: WorkingVarLabel[]
+  - onWorkingVars: WorkingVarLabel[]
+  - modAdditions: AddMod256Label[]
+  - sigma0Label: BitOpLabel
+  - sigma1Label: BitOpLabel
+  - chLabel: BitOpLabel
+  - majLabel: BitOpLabel
+  + CompressionCanvasView(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+package "_" <<rectangle>> {
+  class EncodeView {
+    - model: TutoringSession
+    - question: String
+    - questionData: List<Integer>
+    - asciiStep: EncodeAsciiStep
+    - lastInput: String
+    - random: Random {static}
+    - conversionFrom: ConversionType
+    - conversionTo: ConversionType
+    + EncodeView(): void
+    + newRequest(): NewExampleRequest
+    + stepCompletion(): StepCompletion
+    + actionPerformed(event: ActionEvent): void
+    + keyPressed(e: KeyEvent): void
+    - handleStepThroughAscii(): void
+    - handleCompleteAsciiConversion(): void
+    - handleSubmission(): void
+    - prepareNextQuestion(): void
+    - convertBasedOnType(input: int, type: ConversionType): String
+    + intToBinaryByte(value: int): String
+    + intToHexString(value: int): String
+    + intToSymbol(value: int): String
+    - shotHint(): void
+    - updateConversionFrom(source: JRadioButton): void
+    - updateConversionTo(source: JRadioButton): void
+    - getRandomCharacter(): int
+    + setModel(model: TutoringSession): void
+    # updateView(): void
+  }
+  enum ConversionType {
+    DECIMAL
+    BINARY
+    HEXADECIMAL
+    SYMBOL
+  }
+  ConversionType -l-> EncodeView::conversionFrom
+  ConversionType -l-> EncodeView::conversionTo
+}
+
+class ExclusiveOrView {
+  - stringX: String
+  - stringY: String
+  - problemSize: int
+  - random: Random {static}
+  + ExclusiveOrView(): void
+  - generateInputString(): String
+  - formatResult(answer: long): String
+  - generateNewQuestion(): void
+  - performXOR(x: String, y: String): String
+  + actionPerformed(event: ActionEvent)
+  + keyPressed(e: KeyEvent): void
+  - verifyAnswer(): void
+  - onNextQuestion(): void
+  - onNextHint(): void
+  - onCheckButton(): void
+  + newRequestion(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class GPanel {
+  + GPanel(): void
+  + addc(Component, int, int, int, int, double, double, 
+  int, int, int, int, int, int): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class GuiController {
+  - SINGLTON: GuiController   {static}
+  + instance(): GuiController {static}
+  - stepSelectorView: StepSelectorView
+  - stepView: StepView
+  - sha256Alg: SHA_2565
+  - gson: Gson
+  + getSha256Alg(): SHA_256
+  + getStepSelectorView(): StepSelectorView
+  + setStepSelectorView(stepSelectionView: StepSelectorView): void
+  + getStepView(): StepView
+  + setStepView(stepView: StepView): void
+  + tutorRequest(request: ClientRequest): TutorReply
+  - handleStepCompletionReply(reply: TutorReply)
+  - GuiController(): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class HighlightLabel {
+  - EMPTY_BORDER: Border        {static}
+  - NORMAL_BORDER: Border       {static}
+  - HIGHLIGHT_BORDER: Border    {static}
+  - SELECTED_BORDER: Border     {static}
+  - NORMAL_BACKGROUND: Color    {static}
+  - HIGHLIGHT_BACKGROUND: Color {static}
+  - SELECTED_BACKGROUND: Color  {static}
+  - stepSelection: StepCollection
+  - isSelected: boolean
+  + HighlightLabel(text: String): void
+  + setStepSelection(stepSelection: StepSelection): void
+  + select(): void
+  + deselect(): void
+  + mouseClicked(evt: MouseEvent): void
+  + mouseEntered(e: MouseEvent): void
+  + mouseExited(e: MouseEvent): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class HintTextField {
+  - hint: String
+  # hintColor: Color
+  - isEmailAddr: boolean
+  + HintTextField(): void
+  + HintTextField(text: String): void
+  + HintTextField(columns: int): void
+  + HintTextField(text: String, columns: int): void
+  - init(hint: String): void
+  + getHint(): String
+  + setHint(hint: String): void
+  + getIsEmailAddr(): boolean
+  + setIsEmailAddr(isEmailAddress: boolean): void
+  + isDefaultView(): boolean
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class initVarView {
+  - test: JLabel
+  + InitVarView(): void
+  + actionPerformed(event: ActionEvent): void
+  - initializeComponents(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class MainFrame {
+  - SINGLTON: MainFrame    {static}
+  + instance(): MainFrame  {static}
+  - SCREEN_SIZE_INSET: int {static}
+  - model: TutoringSession
+  - view: TutoringSessionView
+  - MainFrame(): void
+  + getModel(): TutoringSession
+  + setModel(model: TutoringSession): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class MajFunctionView {
+  - stringX: String
+  - stringY: String
+  - stringZ: String
+  - problemSize: int
+  - random: Random {static}
+  + MajFunctionView(); void
+  + actionPerformed(event: ActionEvent): void
+  - generateInputString(): String
+  - formatResult(answer: long): String
+  - generateNextQuestion(): void
+  - majorityFunction(x: String, y: String, z: String): String
+  - verifyAnswer(): void
+  + keyPressed(e: KeyEvent): void
+  - onNextQuestion(): void
+  - onNextHint(): void
+  - onCheckButton(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletion
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class NewAccountPanel {
+  - LOGGER: Logger                     {static}
+  + VALID_EMAIL_ADDRESS_REGEX: Pattern {static}
+  - model: Account
+  # fName: HintTextField
+  # lName: HintTextField
+  # userId: HintTextField
+  # pass1: JPasswordField
+  # pass2: JPasswordField
+  # strength: JLabel
+  # msg: JLabel
+  # signInBut: JButton
+  # createAcctBut: JButton
+  + NewAccountPanel(): void
+  + getModel(): Account
+  + setModel(model: Account): void
+  + getUserIdComp(): JTextField
+  + updateFocus(): void
+  + clearFields(): void
+  - updateModel(): void
+  - updateDisplay(): void
+  - initComponents(): void
+  - layoutPanel(): void
+  - createHeader: GPanel
+  - createOverview(): GPanel
+  - createLogin(): GPanel
+  - checkStrength(): void
+  - samePasswords(): boolean
+  - enableButtons(e: Document): void
+  + encryptSHA256(base: String): String {static}
+}
+''''''''''''''''''''''''''''''''''''''''''''
+class PadView {
+  - exampleCharacter: JLabel
+  - charInput: JTextField
+  - verifyButton: JButton
+  + PadView(): void
+  + notifyAsciiEncoding(bytes: byte[]): void
+  + convertStringToBinary(input: String): String {static} 
+  + actionPerformed(event: ActionEvent): void
+  + keyTyped(event: KeyEvent): void
+  + keyPressed(e: KeyEvent): void
+  - verifyInput(): void
+  - formatBinaryString(binary: String): String
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletionReplyView
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class RotateView {
+  - problemString: String
+  - numRotations: int
+  - answer: String
+  - currentStep: RotateStep
+  + RotateView(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+  + actionPerformed(event: ActionEvent): void
+  + keyPressed(e: KeyEvent): void
+  # updateView(): void
+  + setCurrentTask(task: Task): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class ShaOneView {
+  - X_PLACES: int
+  - EXAMPLE_INPUT: int
+  - answer: String
+  + ShaOneView(): void
+  + actionPerformed(event: ActionEvent): void
+  + shiftRightString(x: int, places: int): String
+  + keyPressed(e: KeyEvent): void
+  - verifyAnswer(): void
+  - onNextQuestion(): void
+  - onNextHint(): void
+  - onCheckButton(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletion    
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class ShaTuMenuBar {
+  + ShaTuMenuBar(): void
+  - createFileMenu(): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class ShaZeroView {
+  - X_PLACES: int
+  - EXAMPLE_INPUT: int
+  - answer: String
+  + ShaZeroView(): void
+  + actionPerformed(event: ActionEvent): void
+  - calculateSigma(input: int): String
+  + keyPressed(e: KeyEvent): void
+  - verifyAnswer(): void
+  - onNextQuestion(): void
+  - onNextHint(): void
+  - onCheckButton(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletion   
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class ShiftRightView {
+  - operand: String
+  - shiftLength: int
+  - shiftRight: boolean
+  - bitLength: int
+  + ShiftRightView(): void
+  + actionPerformed(event: ActionEvent): void
+  - onNextHint(): void
+  - onCheckButton(): void
+  # updateView(): void
+  + shiftRightString(x: int, places: int): String
+  + keyPressed(e: KeyEvent): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletion     
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class SplashFrame {
+  + SPLASH: String {static}
+  + NEW_USER: String {static}
+  + MAX_SIGNIN_ATTEMPTS: int {static}
+  - SINGLTON: SplashFrame: {static}
+  + instance(): SplashFrame {static}
+  - cards: JPanel
+  - selectedPanel: String
+  - splashPanel: SplashPanel
+  - newAccountPanel: NewAccountPanel
+  # signInAttempts: int
+  - SplashFrame(): void
+  + getUser(): User
+  + getAccount(): Account
+  + invalidPass(): void
+  + selectSplash(): void
+  + selectNewUser(): void
+  + clearNewAccountPanel(): void
+  + unknownUser(): void
+  - selectPanel(name: String): void 
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class StepCompletionReplyView {
+  - msg: JTextArea
+  - buttonPanel: JPanel
+  - nextTaskBut: JButton
+  - sameProblemBut: JButton
+  - similarProblemBut: JButton
+  + StepCompletionReplyView(): void
+  + actionPerformed(e: ActionEvent): void
+  - selectPanel(name: String): void
+  - initializeComponents(): void
+  - initButtonPanel1(): GPanel
+  - initButtonPanel2(): GPanel
+  - initButtonPanel3(): GPanel
+  - layoutComponents(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion: StepCompletion
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+enum StepSelection {
+  ENCODE
+  ADD1
+  PAD
+  LENGTH
+  XOR
+  CHOICE_FUNCTION
+  PREPARE
+  INIT_VARS
+  COMPRESS
+  ROTATE_BITS
+  SHIFT_RIGHT
+  ADD_TWO_BIT
+  MAJ_FUNCTION
+  SHA_ZERO
+  SHA_ONE
+  STEP_REPLY
+  - label: HighlightLabel
+  StepSelection(label: HightlightLabel)
+  + getLabel: HighlightLabel
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class StepView {
+  - selectedPanel: StepSelection
+  - encodeView: EncodeView
+  - compressionView: CompressionView
+  - prepareScheduleView: PrepareScheduleView
+  - add1View: Add1View
+  - padView: PadView
+  - rotateView: RotateView
+  - initVarView: InitVarView
+  - shiftrightView: ShiftRightView
+  - excluseOrView: ExclusiveOrView
+  - addTwoBitView: AddTwoBitView
+  - majFunction: MajFunctionView
+  - shaZeroView: ShaZeroView
+  - shaOne: ShaOneView
+  - choiceFunctionView: ChoiceFunctionView
+  - stepReplyView: StepCompletionReplyView
+  - model: TutoringSession
+  + StepView(): void
+  + getModel(): TutoringSession
+  + setModel(model: TutoringSession): void
+  + selectedPanel(name StepSelection): void
+  + getUserRequestView(): UserRequestView
+  - initializeComponents(): void
+  - initializeLayout(): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+class WorkingVarLabel {
+  + SIZE: int  {static}
+  + HALF_SIZE: int
+  - EMPTY_BORDER: Border
+  - NORMAL_BORDER: Border
+  - HIGHLIGHT_BORDER: Border
+  - NORMAL_BACKGROUND: Color
+  - HIGHLIGHT_BACKGROUND: Color
+  - SELECTED_BACKGROUND: Color
+  - stepSelection: StepSelection
+  - isSelected: boolean
+  + WorkingVarLabel(text: String)
+  + select(): void
+  + deselect(): void
+  + mouseClicked(evt: MouseEvent): void
+  + mouseEntered(e: MouseEvent): void
+  + mouseExited(e: MouseEvent): void
+}
+''''''''''''''''''''''''''''''''''''''''''''''
+package "Extends GPanel" <<rectangle>> {
+  class SplashPanel extends GPanel {
+    - LOGGER: Logger     {static}
+    - model: User
+    # userID: JTextField
+    # password: JPasswordField
+    # signInBut: JButton
+    # createAcctBut: JButton
+    + SplashPanel(): void
+    + setInitialFocus(): void
+    + getModel(): User
+    + setModel(model: User): void
+    + updateFocus(): void
+    + getSigninButton(): JButton
+    - initializeComponents(): void
+    - layoutComponents(): void
+    - createHeader(): GPanel
+    - createLogin(): GPanel
+    - createOverview(): GPanel
+  }
+  class StepSelectorView extends GPanel {
+    - selectedStep: StepSelection
+    + StepSelectorView(): void
+    + displayStep(selection: StepSelection): void
+    - createPreprocessingPanel(): GPanel
+    - createHashCompPanel(): GPanel
+  }
+  class TutoringSessionView extends GPanel {
+    - model: TutoringSession
+    - stepSelectorView: StepSelectorView
+    - stepView: StepView
+    + TutoringSessionView(): void
+    + getModel(): TutoringSession
+    + setModel(model: TutoringSession): void
+    - initializeComponents(): (void)
+    - layoutComponents(): void
+  }
+  abstract UserRequestView extends GPanel {
+    - model: TutoringSession
+    - gson: Gson
+    - random: Random
+    + abstract newRequest(): NewExampleRequest
+    + abstract stepCompletion(): StepCompletion
+    + setMOdel(model: TutoringSession): void
+    + setCurrentTask(task: Task): void
+    - updateView(): void
+  }
+}    
+class "Add1View" extends UserRequestView implements ActionListener
+class "AddMod256Label" extends JLabel implements MouseListener
+class AddTwoBitView extends UserRequestView implements ActionListener, KeyListener
+class BitOpLabel extends JLabel implements MouseListener
+class ChoiceFunctionView extends UserRequestView implements ActionListener, KeyListener
+class CompressionCanvasView extends UserRequestView
+class EncodeView extends UserRequestView implements ActionListener, KeyListener, EncodeAsciiStep.OutputListener
+class ExclusiveOrView extends UserRequestView implements ActionListener, KeyListener
+class GPanel extends JPanel
+'class GuiController extends
+class HighlightLabel extends JLabel implements MouseListener
+class HintTextField extends JTextField
+class initVarView extends UserRequestView implements ActionListener
+class MainFrame extends JFrame implements WindowListener
+class MajFunctionView extends UserRequestView implements ActionListener, Keylistener
+class PadView extends UserRequestView implements ActionListener, Keylistener, SHA_256Listener
+class PrepareScheduleView extends UserRequestView implements ActionListener
+class RotateView extends UserRequestView implements ActionListener, KeyListener
+class ShaOneView extends UserRequestView implements ActionListener, Keylistener
+class ShaTuMenuBar extends JMenuBar
+class ShaZeroView extends UserRequestView implements ActionListener, Keylistener
+class ShiftRightView extends UserRequestView implements ActionListener, Keylistener
+class SplashFrame extends JFrame
+class StepCompletionReplyView extends UserRequestView implements ActionListener
+'enum StepSelection...
+class StepView extends JPanel
+@enduml

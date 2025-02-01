@@ -1,0 +1,716 @@
+@startuml
+!include variables.puml
+'____'
+class ActionListener $taga
+class KeyListener $tagb
+class MouseListener $tagc
+class WindowListener $tagd
+
+class "Add1View" $tag00 {
+  - stepDataModel: AddOneStep
+  - source: JLabel
+  - hintsrequested: int
+  - wasHintRequested: boolean
+  - random: Random            {static}
+  - gson: Gson
+  + Add1View()
+  + actionPerformed(event: ActionEvent): void
+  - initializeComponents(): void
+  - initializeLayout(): void
+  + submitAnswer(): void
+  + requestHint(): void
+  + convertMessageToBinaryWithSpaces(message: String): String
+  + setModel(model: TutoringSession): void
+  - updateView(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+}
+'____'
+class "AddMod256Label" $tag01 {
+  + SIZE: int                   {static}
+  + HALF_SIZE: int              {static}
+  - NORMAL_BORDER: Border       {static}
+  - HIGHLIGHT_BORDER: Border    {static}
+  - NORMAL_BACKGROUND: Color    {static}
+  - HIGHLIGHT_BACKGROUND: Color {static}
+  - SELECTED_BACKGROUND: Color  {static}
+  - stepSelection: StepSelection
+  - isSelected: boolean
+  + AddMod256Label(): void
+  + select(): void
+  + deselect(): void
+  + paintComponent(g: Graphics): void
+  + mouseClicked(evt: MouseEvent): void
+  + mouseEntered(e: MouseEvent): void
+  + mouseExited(e: MouseEvent): void
+}
+'____'
+class AddTwoBitView $tag02 {
+  - m: int
+  - binary1: String
+  - binary2: String
+  + AddTwoBitView(): void
+  + actionPerformed(event: ActionEvent): void
+  - calculateModulo(binary1: String, binary2: String): String
+  + keyPressed(e: KeyEvent): void
+  - verifyAnswer(): void
+  - onCheckButton(): void
+  + newRequest(): NewExampleRequest
+  + stepCompletion(): StepCompletion
+  # updateView(): void
+}
+'____'
+    class BitOpLabel $tag03 {
+        + SIZE: int                   {static}
+        + HALF_SIZE: int              {static}
+        - EMPTY_BORDER: Border        {static}
+        - NORMAL_BORDER: Border       {static}
+        - HIGHLIGHT_BORDER: Border    {static}
+        - NORMAL_BACKGROUND: Color    {static}
+        - HIGHLIGHT_BACKGROUND: Color {static}
+        - SELECTED_BACKGROUND: Color  {static}
+        - stepSelection: StepSelection
+        - isSelected: boolean
+        + BitOpLabel(text: String)
+        + select(): void
+        + deselect(): void
+        + getSize(): int
+        + mouseClicked(evt: MouseEvent): void
+        + mousePressed(e: MouseEvent): void
+        + mouseReleased(e: MouseEvent): void
+        + mouseExited(e: MouseEvent): void
+    }
+'____'
+    class ChoiceFunctionView $tag04 {
+        - stringX: String
+        - stringY: String
+        - stringZ: String
+        - problemSize: int
+        + ChoiceFunctionView(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion
+        + actionPerformed(event: ActionEvent): void
+        + keyPressed(e: KeyEvent): void
+        - onNextHint(): void
+        - onCheckButton(): void
+        # updateView(): void
+    }
+'____'
+    class CompressionCanvasView $tag05 {
+        - WORKING_VARS_LEN: int  {static}
+        - MOD_ADDITIONS_LEN: int {static}
+        - LEFT_INDENT: int       {static}
+        - ASCII_A_VAL: int       {static}
+        - inWorkingVars: WorkingVarLabel[]
+        - onWorkingVars: WorkingVarLabel[]
+        - modAdditions: AddMod256Label[]
+        - sigma0Label: BitOpLabel
+        - sigma1Label: BitOpLabel
+        - chLabel: BitOpLabel
+        - majLabel: BitOpLabel
+        + CompressionCanvasView(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion(): StepCompletion
+    }
+'____'
+together {
+  class EncodeView $tag06 {
+    - model: TutoringSession
+    - question: String
+    - questionData: List<Integer>
+    - asciiStep: EncodeAsciiStep
+    - lastInput: String
+    - random: Random {static}
+    - conversionFrom: ConversionType
+    - conversionTo: ConversionType
+    + EncodeView(): void
+    + newRequest(): NewExampleRequest
+    + stepCompletion(): StepCompletion
+    + actionPerformed(event: ActionEvent): void
+    + keyPressed(e: KeyEvent): void
+    - handleStepThroughAscii(): void
+    - handleCompleteAsciiConversion(): void
+    - handleSubmission(): void
+    - prepareNextQuestion(): void
+    - convertBasedOnType(input: int, type: ConversionType): String
+    + intToBinaryByte(value: int): String
+    + intToHexString(value: int): String
+    + intToSymbol(value: int): String
+    - shotHint(): void
+    - updateConversionFrom(source: JRadioButton): void
+    - updateConversionTo(source: JRadioButton): void
+    - getRandomCharacter(): int
+    + setModel(model: TutoringSession): void
+    # updateView(): void
+  }
+  enum ConversionType $tag07 {
+    DECIMAL
+    BINARY
+    HEXADECIMAL
+    SYMBOL
+  }
+    ConversionType -l-> EncodeView::conversionFrom
+    ConversionType -l-> EncodeView::conversionTo
+  }
+'____'
+    class ExclusiveOrView $tag08 {
+        - stringX: String
+        - stringY: String
+        - problemSize: int
+        - random: Random {static}
+        + ExclusiveOrView(): void
+        - generateInputString(): String
+        - formatResult(answer: long): String
+        - generateNewQuestion(): void
+        - performXOR(x: String, y: String): String
+        + actionPerformed(event: ActionEvent)
+        + keyPressed(e: KeyEvent): void
+        - verifyAnswer(): void
+        - onNextQuestion(): void
+        - onNextHint(): void
+        - onCheckButton(): void
+        + newRequestion(): NewExampleRequest
+        + stepCompletion(): StepCompletion
+    }
+'____'
+    class GPanel $tag09 {
+        + GPanel(): void
+        + addc(Component, int, int, int, int, double, double, 
+        int, int, int, int, int, int): void
+    }
+'____'
+    class GuiController $tag10 {
+        - SINGLTON: GuiController   {static}
+        + instance(): GuiController {static}
+        - stepSelectorView: StepSelectorView
+        - stepView: StepView
+        - sha256Alg: SHA_2565
+        - gson: Gson
+        + getSha256Alg(): SHA_256
+        + getStepSelectorView(): StepSelectorView
+        + setStepSelectorView(stepSelectionView: StepSelectorView): void
+        + getStepView(): StepView
+        + setStepView(stepView: StepView): void
+        + tutorRequest(request: ClientRequest): TutorReply
+        - handleStepCompletionReply(reply: TutorReply)
+        - GuiController(): void
+    }
+'____'
+    class HighlightLabel $tag11 {
+        - EMPTY_BORDER: Border        {static}
+        - NORMAL_BORDER: Border       {static}
+        - HIGHLIGHT_BORDER: Border    {static}
+        - SELECTED_BORDER: Border     {static}
+        - NORMAL_BACKGROUND: Color    {static}
+        - HIGHLIGHT_BACKGROUND: Color {static}
+        - SELECTED_BACKGROUND: Color  {static}
+        - stepSelection: StepCollection
+        - isSelected: boolean
+        + HighlightLabel(text: String): void
+        + setStepSelection(stepSelection: StepSelection): void
+        + select(): void
+        + deselect(): void
+        + mouseClicked(evt: MouseEvent): void
+        + mouseEntered(e: MouseEvent): void
+        + mouseExited(e: MouseEvent): void
+    }
+'____'
+    class HintTextField $tag12 {
+        - hint: String
+        # hintColor: Color
+        - isEmailAddr: boolean
+        + HintTextField(): void
+        + HintTextField(text: String): void
+        + HintTextField(columns: int): void
+        + HintTextField(text: String, columns: int): void
+        - init(hint: String): void
+        + getHint(): String
+        + setHint(hint: String): void
+        + getIsEmailAddr(): boolean
+        + setIsEmailAddr(isEmailAddress: boolean): void
+        + isDefaultView(): boolean
+    }
+'____'
+    class initVarView $tag13 {
+        - test: JLabel
+        + InitVarView(): void
+        + actionPerformed(event: ActionEvent): void
+        - initializeComponents(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion(): StepCompletion
+    }
+'____'
+    class MainFrame $tag14 {
+        - SINGLTON: MainFrame    {static}
+        + instance(): MainFrame  {static}
+        - SCREEN_SIZE_INSET: int {static}
+        - model: TutoringSession
+        - view: TutoringSessionView
+        - MainFrame(): void
+        + getModel(): TutoringSession
+        + setModel(model: TutoringSession): void
+}
+'____'
+    class MajFunctionView $tag15 {
+        - stringX: String
+        - stringY: String
+        - stringZ: String
+        - problemSize: int
+        - random: Random {static}
+        + MajFunctionView(); void
+        + actionPerformed(event: ActionEvent): void
+        - generateInputString(): String
+        - formatResult(answer: long): String
+        - generateNextQuestion(): void
+        - majorityFunction(x: String, y: String, z: String): String
+        - verifyAnswer(): void
+        + keyPressed(e: KeyEvent): void
+        - onNextQuestion(): void
+        - onNextHint(): void
+        - onCheckButton(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion
+    }
+'____'
+    class NewAccountPanel $tag16 {
+        - LOGGER: Logger                     {static}
+        + VALID_EMAIL_ADDRESS_REGEX: Pattern {static}
+        - model: Account
+        # fName: HintTextField
+        # lName: HintTextField
+        # userId: HintTextField
+        # pass1: JPasswordField
+        # pass2: JPasswordField
+        # strength: JLabel
+        # msg: JLabel
+        # signInBut: JButton
+        # createAcctBut: JButton
+        + NewAccountPanel(): void
+        + getModel(): Account
+        + setModel(model: Account): void
+        + getUserIdComp(): JTextField
+        + updateFocus(): void
+        + clearFields(): void
+        - updateModel(): void
+        - updateDisplay(): void
+        - initComponents(): void
+        - layoutPanel(): void
+        - createHeader: GPanel
+        - createOverview(): GPanel
+        - createLogin(): GPanel
+        - checkStrength(): void
+        - samePasswords(): boolean
+        - enableButtons(e: Document): void
+        + encryptSHA256(base: String): String {static}
+    }
+'____'
+    class PadView $tag17 {
+        - exampleCharacter: JLabel
+        - charInput: JTextField
+        - verifyButton: JButton
+        + PadView(): void
+        + notifyAsciiEncoding(bytes: byte[]): void
+        + convertStringToBinary(input: String): String {static} 
+        + actionPerformed(event: ActionEvent): void
+        + keyTyped(event: KeyEvent): void
+        + keyPressed(e: KeyEvent): void
+        - verifyInput(): void
+        - formatBinaryString(binary: String): String
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion
+    }
+'____'
+    class RotateView $tag18 {
+        - problemString: String
+        - numRotations: int
+        - answer: String
+        - currentStep: RotateStep
+        + RotateView(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion(): StepCompletion
+        + actionPerformed(event: ActionEvent): void
+        + keyPressed(e: KeyEvent): void
+        # updateView(): void
+        + setCurrentTask(task: Task): void
+    }
+'____'
+    class ShaOneView $tag19 {
+        - X_PLACES: int
+        - EXAMPLE_INPUT: int
+        - answer: String
+        + ShaOneView(): void
+        + actionPerformed(event: ActionEvent): void
+        + shiftRightString(x: int, places: int): String
+        + keyPressed(e: KeyEvent): void
+        - verifyAnswer(): void
+        - onNextQuestion(): void
+        - onNextHint(): void
+        - onCheckButton(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion    
+    }
+'____'
+    class ShaTuMenuBar $tag20 {
+        + ShaTuMenuBar(): void
+        - createFileMenu(): void
+    }
+'____'
+    class ShaZeroView $tag21 {
+        - X_PLACES: int
+        - EXAMPLE_INPUT: int
+        - answer: String
+        + ShaZeroView(): void
+        + actionPerformed(event: ActionEvent): void
+        - calculateSigma(input: int): String
+        + keyPressed(e: KeyEvent): void
+        - verifyAnswer(): void
+        - onNextQuestion(): void
+        - onNextHint(): void
+        - onCheckButton(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion   
+    }
+'____'
+    class ShiftRightView $tag22 {
+        - operand: String
+        - shiftLength: int
+        - shiftRight: boolean
+        - bitLength: int
+        + ShiftRightView(): void
+        + actionPerformed(event: ActionEvent): void
+        - onNextHint(): void
+        - onCheckButton(): void
+        # updateView(): void
+        + shiftRightString(x: int, places: int): String
+        + keyPressed(e: KeyEvent): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion     
+    }
+'____'
+    class SplashFrame $tag23 {
+        + SPLASH: String {static}
+        + NEW_USER: String {static}
+        + MAX_SIGNIN_ATTEMPTS: int {static}
+        - SINGLTON: SplashFrame: {static}
+        + instance(): SplashFrame {static}
+        - cards: JPanel
+        - selectedPanel: String
+        - splashPanel: SplashPanel
+        - newAccountPanel: NewAccountPanel
+        # signInAttempts: int
+        - SplashFrame(): void
+        + getUser(): User
+        + getAccount(): Account
+        + invalidPass(): void
+        + selectSplash(): void
+        + selectNewUser(): void
+        + clearNewAccountPanel(): void
+        + unknownUser(): void
+        - selectPanel(name: String): void 
+    }
+'____'
+    class StepCompletionReplyView $tag24 {
+        - msg: JTextArea
+        - buttonPanel: JPanel
+        - nextTaskBut: JButton
+        - sameProblemBut: JButton
+        - similarProblemBut: JButton
+        + StepCompletionReplyView(): void
+        + actionPerformed(e: ActionEvent): void
+        - selectPanel(name: String): void
+        - initializeComponents(): void
+        - initButtonPanel1(): GPanel
+        - initButtonPanel2(): GPanel
+        - initButtonPanel3(): GPanel
+        - layoutComponents(): void
+        + newRequest(): NewExampleRequest
+        + stepCompletion: StepCompletion
+    }
+'____'
+    enum StepSelection $tag25 {
+        ENCODE
+        ADD1
+        PAD
+        LENGTH
+        XOR
+        CHOICE_FUNCTION
+        PREPARE
+        INIT_VARS
+        COMPRESS
+        ROTATE_BITS
+        SHIFT_RIGHT
+        ADD_TWO_BIT
+        MAJ_FUNCTION
+        SHA_ZERO
+        SHA_ONE
+        STEP_REPLY
+        - label: HighlightLabel
+        StepSelection(label: HightlightLabel)
+        + getLabel: HighlightLabel
+    }
+'____'
+    class StepView $tag26 {
+        - selectedPanel: StepSelection
+        - encodeView: EncodeView
+        - compressionView: CompressionView
+        - prepareScheduleView: PrepareScheduleView
+        - add1View: Add1View
+        - padView: PadView
+        - rotateView: RotateView
+        - initVarView: InitVarView
+        - shiftrightView: ShiftRightView
+        - excluseOrView: ExclusiveOrView
+        - addTwoBitView: AddTwoBitView
+        - majFunction: MajFunctionView
+        - shaZeroView: ShaZeroView
+        - shaOne: ShaOneView
+        - choiceFunctionView: ChoiceFunctionView
+        - stepReplyView: StepCompletionReplyView
+        - model: TutoringSession
+        + StepView(): void
+        + getModel(): TutoringSession
+        + setModel(model: TutoringSession): void
+        + selectedPanel(name StepSelection): void
+        + getUserRequestView(): UserRequestView
+        - initializeComponents(): void
+        - initializeLayout(): void
+    }
+'____'
+    class WorkingVarLabel $tag27 {
+        + SIZE: int  {static}
+        + HALF_SIZE: int
+        - EMPTY_BORDER: Border
+        - NORMAL_BORDER: Border
+        - HIGHLIGHT_BORDER: Border
+        - NORMAL_BACKGROUND: Color
+        - HIGHLIGHT_BACKGROUND: Color
+        - SELECTED_BACKGROUND: Color
+        - stepSelection: StepSelection
+        - isSelected: boolean
+        + WorkingVarLabel(text: String)
+        + select(): void
+        + deselect(): void
+        + mouseClicked(evt: MouseEvent): void
+        + mouseEntered(e: MouseEvent): void
+        + mouseExited(e: MouseEvent): void
+    }
+'____'
+package <<rectangle>> $tag28 {
+'____'
+    class SplashPanel $tag29 {
+        - LOGGER: Logger     {static}
+        - model: User
+        # userID: JTextField
+        # password: JPasswordField
+        # signInBut: JButton
+        # createAcctBut: JButton
+        + SplashPanel(): void
+        + setInitialFocus(): void
+        + getModel(): User
+        + setModel(model: User): void
+        + updateFocus(): void
+        + getSigninButton(): JButton
+        - initializeComponents(): void
+        - layoutComponents(): void
+        - createHeader(): GPanel
+        - createLogin(): GPanel
+        - createOverview(): GPanel
+    }
+'____'
+    class StepSelectorView $tag30 {
+        - selectedStep: StepSelection
+        + StepSelectorView(): void
+        + displayStep(selection: StepSelection): void
+        - createPreprocessingPanel(): GPanel
+        - createHashCompPanel(): GPanel
+    }
+'____'
+    class TutoringSessionView $tag31 {
+        - model: TutoringSession
+        - stepSelectorView: StepSelectorView
+        - stepView: StepView
+        + TutoringSessionView(): void
+        + getModel(): TutoringSession
+        + setModel(model: TutoringSession): void
+        - initializeComponents(): (void)
+        - layoutComponents(): void
+    }
+'____'
+    abstract UserRequestView $tag32 {
+        - model: TutoringSession
+        - gson: Gson
+        - random: Random
+        + abstract newRequest(): NewExampleRequest
+        + abstract stepCompletion(): StepCompletion
+        + setMOdel(model: TutoringSession): void
+        + setCurrentTask(task: Task): void
+        - updateView(): void
+    }
+'____'
+}
+'dependencies
+class "Add1View" extends UserRequestView implements ActionListener
+class "AddMod256Label" extends JLabel implements MouseListener
+class AddTwoBitView extends UserRequestView implements ActionListener, KeyListener
+class BitOpLabel extends JLabel implements MouseListener
+class ChoiceFunctionView extends UserRequestView implements ActionListener, KeyListener
+class CompressionCanvasView extends UserRequestView
+class EncodeView extends UserRequestView implements ActionListener, KeyListener, EncodeAsciiStep.OutputListener
+class ExclusiveOrView extends UserRequestView implements ActionListener, KeyListener
+class GPanel extends JPanel
+class HighlightLabel extends JLabel implements MouseListener
+class HintTextField extends JTextField
+class initVarView extends UserRequestView implements ActionListener
+class MainFrame extends JFrame implements WindowListener
+class MajFunctionView extends UserRequestView implements ActionListener, Keylistener
+class PadView extends UserRequestView implements ActionListener, Keylistener, SHA_256Listener
+class PrepareScheduleView extends UserRequestView implements ActionListener
+class RotateView extends UserRequestView implements ActionListener, KeyListener
+class ShaOneView extends UserRequestView implements ActionListener, Keylistener
+class ShaTuMenuBar extends JMenuBar
+class ShaZeroView extends UserRequestView implements ActionListener, Keylistener
+class ShiftRightView extends UserRequestView implements ActionListener, Keylistener
+class SplashFrame extends JFrame
+class StepCompletionReplyView extends UserRequestView implements ActionListener
+class StepView extends JPanel
+'end_dependencies
+'HIDE
+hide $tag00
+hide $tag01
+hide $tag02
+hide $tag03
+hide $tag04
+hide $tag05
+hide $tag06
+hide $tag07
+hide $tag08
+hide $tag09
+hide $tag10
+hide $tag11
+hide $tag12
+hide $tag13
+hide $tag14
+hide $tag15
+hide $tag16
+hide $tag17
+hide $tag18
+hide $tag19
+hide $tag20
+hide $tag21
+hide $tag22
+hide $tag23
+hide $tag24
+hide $tag25
+hide $tag26
+hide $tag27
+hide $tag28
+hide $tag29
+hide $tag30
+hide $tag31
+hide $tag32
+' conditional logic for targeting a class'
+!if ($target_class == "Add1View")
+  show $tag00
+  show $tag32
+  show $taga
+!elseif ($target_class == "AddMod256Label")
+  show $tag01
+  show JLabel
+  show MouseListener
+!elseif ($target_class == "AddTwoBitView")
+  show $tag02
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "BitOpLabel")
+  show $tag03
+  show JLabel
+  show $tagc
+!elseif ($target_class == "ChoiceFunctionView")
+  show ChoiceFunctionView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "CompressionCanvasView")
+  show CompressionCanvasView
+  show $tag32
+!elseif ($target_class == "EncodeView")
+  show EncodeView
+  show ConversionType
+  show $tag32
+  show $taga
+  show KeyListener
+  show EncodeAsciiStep.OutputListener
+!elseif ($target_class == "ExclusiveOrView")
+  show ExclusiveOrView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "GPanel")
+  show GPanel
+  show JPanel
+!elseif ($target_class == "HighlightLabel")
+  show HighlightLabel
+  show JLabel
+  show MouseListener
+!elseif ($target_class == "HintTextField")
+  show HintTextField
+  show JTextField
+!elseif ($target_class == "initVarView")
+  show initVarView
+  show $tag32
+  show $taga
+!elseif ($target_class == "MainFrame")
+  show MainFrame
+  show JFrame
+  show WindowListener
+!elseif ($target_class == "MajFunctionView")
+  show MajFunctionView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "PadView")
+  show PadView
+  show $tag32
+  show $taga
+  show KeyListener
+  show SHA_256Listener
+!elseif ($target_class == "PrepareScheduleView")
+  show PrepareScheduleView
+  show $tag32
+  show $taga
+!elseif ($target_class == "RotateView")
+  show RotateView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "ShaOneView")
+  show ShaOneView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "ShaTuMenuBar")
+  show ShaTuMenuBar
+  show JMenuBar
+!elseif ($target_class == "ShaZeroView")
+  show ShaZeroView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "ShiftRightView")
+  show ShiftRightView
+  show $tag32
+  show $taga
+  show KeyListener
+!elseif ($target_class == "SplashFrame")
+  show SplashFrame
+  show JFrame
+!elseif ($target_class == "StepCompletionReplyView")
+  show StepCompletionReplyView
+  show $tag32
+  show $taga
+!elseif ($target_class == "StepView"
+  show StepView
+  show JPanel
+!endif
+@enduml
