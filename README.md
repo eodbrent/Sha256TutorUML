@@ -1,9 +1,9 @@
 # Sha256TutorUML (WIP)
 ###### *(When I get my other projects moving, I'd like to come back to this and clean it up with more functionality. As I'll be using it for my own projects.)*
 
-#### This college capstone project did not have any documentation when we started. I took the initiative of finding a scaleable solution that future classes could use. We were assigned certain views to work on, but the shear number of classes in the project made it very difficult for students to navigate find their assigned classes.
+#### This college capstone project did not have any documentation when we started. I took the initiative of finding a scaleable solution that future classes could use. We were assigned certain views to work on, but the shear number of classes in the project made it very difficult for students to find their assigned classes.
 ---
-## USE:  
+## USE:
 ### You'll need [PlantUML](https://plantuml.com/starting) and a text editor that supports PlantUML.  
 ###### *(if you want a viewable diagram generated while you code it, otherwise, notepad works fine)*  
 ##### I've used, and had good experiences with:  
@@ -13,3 +13,14 @@
 
 ###### *I found VS Code better for handling larger diagram generation.*  
 ---
+#### To specify a class, change the `!$target_class` variable in `variables.puml` <br>*Note: logic is handled in `view_pkg.puml` - valid class names can be found there*
+### Load view_pkg.puml in PlantUML to generate class diagram.
+--- 
+I also created a lite sequence diagram for client, server, database interaction (`SEQ.puml`). I'd like to tinker more with this one in the future.
+
+###### *TODO: create thumbnails for faster loading
+<h2 align="center">
+  Example Images:<br>
+  <img src="./assets/ShaTuTutor.png" alt="Sequence Diagram - SEQ.puml"/>
+  <img src="./assets/view.act_Pkg.png" alt="View.Act Package diagram"/>
+</h2>
